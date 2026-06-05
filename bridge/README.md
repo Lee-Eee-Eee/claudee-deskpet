@@ -51,8 +51,8 @@ Claudee 桌宠的 PC 侧：把 **Claude Code** 的实时状态喂给板子上的
 在 **Windows** 用 VS Code 打开 `Claudee/`，`make` 编译 + F5 经 J-Link 烧录（WSL 里无法 build）。
 
 ### 2. 接线（3.3V USB-TTL，或你已在用的板载串口）
-和你用 MobaXterm 连 1.2 时一样：板 `PTC4(TX)→PC RX`、`PTC3(RX)→PC TX`、共地，9600 8N1。
-> 跑 Claudee 时 COM 口要交给 `bridge.py` 独占——**先关掉 MobaXterm**。
+板 `PTC4(TX)→PC RX`、`PTC3(RX)→PC TX`、共地，9600 8N1。
+> 跑 Claudee 时 COM 口要交给 `bridge.py` 独占。
 
 ### 3. 装 hooks + 命令（WSL）
 ```bash
@@ -63,7 +63,7 @@ cd tools/claudee-bridge
 （`statusLine` 把 token/花费/上下文% 同步到板底，也会成为你终端的状态栏。）
 
 ### 4. 跑桥（Windows）
-```bat
+```powershell
 pip install pyserial
 python tools\claudee-bridge\bridge.py --com COM5
 ```

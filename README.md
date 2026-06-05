@@ -9,7 +9,7 @@
 指导老师：曾鸣
 作者：李涛
 
-Blazar（NXP MKL25Z128，Cortex-M0+）教学板：
+Blazar（NXP MKL25Z128，Cortex-M0+）教学板 + Claude Code(WSL)：
 实时显示 Claude Code 的工作状态与 token/花费，
 
 裸机 C · 无操作系统 · 无 framebuffer · GNU Make + arm-none-eabi-gcc
@@ -26,7 +26,7 @@ Blazar（NXP MKL25Z128，Cortex-M0+）教学板：
 - **实时遥测**——屏幕底部显示本次会话的 **模型 / 累计花费 / token 数 / 上下文占用%**（`Opus  $0.58  51.1k  5%`）。
 - **权限即挑战**——当且仅当 CC **真的发出权限请求**（要跑 `Bash`、改文件……）时，板子进入挑战：
   - **深蹲模式**：举着板子做 10 个深蹲（加速度计检测），完成 → 回传 `accept`，CC 继续；
-  - **跑酷模式**：操纵 Clawd 跳过/躲开 10 个 AI/ag 的图标（OpenAI / Gemini / Grok / Codex / DeepSeek / Kimi / Antigravity / opencode / openclaw / Claude），攒够 10 分按键放行。
+  - **跑酷模式**：操纵 Clawd 跳过/躲开 10 个 AI/agent 的图标（OpenAI / Gemini / Grok / Codex / DeepSeek / Kimi / Antigravity / opencode / openclaw / Claude），攒够 10 分按键放行。
 - **本地可玩**——三个按键可不经 CC 直接唤起挑战、切换模式、跳跃，方便调试与展示。
 
 > 名字来源：**Clawd** 是 Claude Code 的橙色像素螃蟹吉祥物，**Claudee** = Clawd 的硬件化桌宠。
@@ -61,11 +61,11 @@ Blazar（NXP MKL25Z128，Cortex-M0+）教学板：
 | 外设 | 器件 / 引脚 | 课程实验来源 |
 |---|---|---|
 | MCU | NXP **MKL25Z128**（Cortex-M0+，48MHz 上限，**本项目用默认 FEI ~20.97MHz**，16KB SRAM，无 FPU） | — |
-| 显示 | **ILI9341** 320×240 TFT，8 位并口（PTD0–7 + 控制脚 PTB8–11/PTA19/PTE31） | 7.1 |
-| 加速度计 | **MMA8451Q**，I²C0（PTE24/25，地址 0x1D） | 7.1 / 8.x |
+| LCD显示屏 | **ILI9341** 320×240 TFT，8 位并口（PTD0–7 + 控制脚 PTB8–11/PTA19/PTE31） | 7.1 |
+| 加速度传感器 | **MMA8451Q**，I²C0（PTE24/25，地址 0x1D） | 7.1 / 8.x |
 | 串口 | UART1（PTC3 RX / PTC4 TX，9600 8N1） | 1.2 |
 | 蜂鸣器 | TPM0_CH4 PWM（PTC8） | 8.2 |
-| 音量旋钮 | ADC0_SE14（PTC0，电位器） | 8.2 / 6.1 |
+| 音量旋钮 | ADC0_SE14（PTC0） | 8.2 / 6.1 |
 | 按键 | PORTA 中断 A=PTA14 / B=PTA16 / C=PTA17 | 3.2 |
 | 板载 4 LED | PORTC（组选 PTC6/7/12/13 + 红 PTC9），PIT 软件 PWM 呼吸 | 4.2 |
 
@@ -115,7 +115,7 @@ Blazar（NXP MKL25Z128，Cortex-M0+）教学板：
 ## 🚀 快速开始
 
 ### 1) 烧录固件（Windows）
-```bat
+```powershell
 cd firmware
 make                         &:: 需 arm-none-eabi-gcc + make
 :: 或在 VS Code 里 F5 经 J-Link 烧录 (build/app.bin)
@@ -132,7 +132,7 @@ cd bridge
 ```
 
 ### 4) 跑桥（Windows）
-```bat
+```powershell
 pip install pyserial
 python bridge\bridge.py --com COM5        :: 换成你的串口号；无板子可 --dry-run
 ```
@@ -188,9 +188,3 @@ cd bridge && python3 -m pytest tests/ -q
 - 复用课程实验例程驱动：`Blazar_TFTLCD.c`、`MMA8451Q.c`、`KL2x_gpio.c`、`UART.c`。
 - NXP/Freescale 设备头与启动代码位于 `firmware/Project_Headers/`、`firmware/Project_Settings/`。
 - 感谢曾鸣老师、杨潇师兄和沙菲师姐的悉心指导！
-  
----
-
-<div align="center">
-🦀 <i>Clawd 在等你来撸（的代码）。</i>
-</div>
