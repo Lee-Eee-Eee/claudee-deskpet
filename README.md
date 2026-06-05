@@ -4,9 +4,13 @@
 
 **把 Claude Code 变成你桌上的硬件小宠物**
 
-一块清华 Blazar（NXP MKL25Z128，Cortex-M0+）教学板 + 一只像素螃蟹 **Clawd**：
-它实时显示 Claude Code 的工作状态与 token/花费，
-当 CC 请求工具权限时，让你**做满 10 个深蹲**或**玩赢一局跑酷**来"放行"。
+清华大学《数字电路与嵌入式系统》大作业
+2026年春
+指导老师：曾鸣
+作者：李涛
+
+Blazar（NXP MKL25Z128，Cortex-M0+）教学板：
+实时显示 Claude Code 的工作状态与 token/花费，
 
 裸机 C · 无操作系统 · 无 framebuffer · GNU Make + arm-none-eabi-gcc
 
@@ -22,7 +26,7 @@
 - **实时遥测**——屏幕底部显示本次会话的 **模型 / 累计花费 / token 数 / 上下文占用%**（`Opus  $0.58  51.1k  5%`）。
 - **权限即挑战**——当且仅当 CC **真的发出权限请求**（要跑 `Bash`、改文件……）时，板子进入挑战：
   - **深蹲模式**：举着板子做 10 个深蹲（加速度计检测），完成 → 回传 `accept`，CC 继续；
-  - **跑酷模式**：操纵 Clawd 跳过/躲开 10 个对手 AI 的图标（OpenAI / Gemini / Grok / Codex / DeepSeek / Kimi / Antigravity / opencode / openclaw / Claude），攒够 10 分按键放行。
+  - **跑酷模式**：操纵 Clawd 跳过/躲开 10 个 AI/ag 的图标（OpenAI / Gemini / Grok / Codex / DeepSeek / Kimi / Antigravity / opencode / openclaw / Claude），攒够 10 分按键放行。
 - **本地可玩**——三个按键可不经 CC 直接唤起挑战、切换模式、跳跃，方便调试与展示。
 
 > 名字来源：**Clawd** 是 Claude Code 的橙色像素螃蟹吉祥物，**Claudee** = Clawd 的硬件化桌宠。
@@ -65,15 +69,13 @@
 | 按键 | PORTA 中断 A=PTA14 / B=PTA16 / C=PTA17 | 3.2 |
 | 板载 4 LED | PORTC（组选 PTC6/7/12/13 + 红 PTC9），PIT 软件 PWM 呼吸 | 4.2 |
 
-无 framebuffer（16KB SRAM 放不下 320×240×2B=150KB），所有画面都是**局部/脏矩形直写面板 GRAM**。
+所有画面都是**局部/脏矩形直写面板 GRAM**。
 
 ---
 
-## 🎓 用到的课堂知识点（大作业重点）
+## 🎓 实现细节
 
-> 这是一台几乎把嵌入式课程"全家桶"都用上的设备。下表把每个知识点对到**代码位置**。
-
-| 课堂知识点 | 在 Claudee 里怎么用 | 代码 |
+| 实现细节 | 在 Claudee 里怎么用 | 代码 |
 |---|---|---|
 | **GPIO 输入/输出 + PORT 复用(PCR/MUX)** | LCD 8 位并口、4 LED、3 按键、LCD 控制脚 | `firmware/Sources/led.c`、`input.c`、`Blazar_TFTLCD.c` |
 | **中断 + NVIC + 向量表(weak 别名覆盖)** | UART1 RX(**IRQ13**)、PORTA 按键(**IRQ30**)、PIT(**IRQ22**) 三个 ISR 各自覆盖 `kinetis_sysinit.c` 里的弱符号 | `comm.c`、`input.c`、`led.c`、`Project_Settings/Startup_Code/kinetis_sysinit.c` |
@@ -89,7 +91,7 @@
 | **面板时序 / 显存寻址** | ILI9341 的 `CASET/PASET/MemWrite`、`MADCTL` 扫描方向；开窗流式 vs 逐像素 | `gfx.c`、`Blazar_TFTLCD.c` |
 | **串口通信协议设计** | 1 字节状态码 + `0xFE` 遥测帧 + `0xFC` 情境帧 + 链路超时回 SLEEP | `comm.c`、`bridge/protocol.py` |
 
-更细的实现与取舍记录在各模块源码注释里（中文）。
+更细的实现与取舍记录在各模块源码注释中。
 
 ---
 
@@ -118,12 +120,11 @@ cd firmware
 make                         &:: 需 arm-none-eabi-gcc + make
 :: 或在 VS Code 里 F5 经 J-Link 烧录 (build/app.bin)
 ```
-> WSL 里只能 `make`/语法检查，**不能 J-Link 烧录**（J-Link 在 Windows 侧）。
 
 ### 2) 接线
-板 `PTC4(TX)→PC RX`、`PTC3(RX)→PC TX`、共地，9600 8N1（和用 MobaXterm 连板时一样；跑 Claudee 时**先关掉 MobaXterm**，COM 口要交给 bridge 独占）。
+板 `PTC4(TX)→PC RX`、`PTC3(RX)→PC TX`、共地，9600 8N1（COM 口要交给 bridge 独占）。
 
-### 3) 装 CC skill（在 WSL 里）
+### 3) 装 CC skill（WSL）
 ```bash
 cd bridge
 ./install.sh          # 装 hooks + /claudee 命令, 自动并入 ~/.claude/settings.json
@@ -160,15 +161,14 @@ claudee-deskpet/
 │  ├─ Project_Headers/     NXP 设备头 (MKL25Z4.h, derivative.h)
 │  ├─ Project_Settings/    启动代码 + 链接脚本 (向量表在此)
 │  └─ Makefile             arm-none-eabi-gcc + J-Link
-├─ bridge/                 ①CC skill + ②Win/WSL 桥
-│  ├─ bridge.py            Windows 串口守护 + TCP 服务
-│  ├─ protocol.py          两端共用的帧协议 (+单测)
-│  ├─ hooks/               CC hooks (permission_gate/status_out/statusline/ctl/client)
-│  ├─ commands/claudee.md  /claudee 命令
-│  ├─ settings.snippet.json  待并入的 hooks + statusLine
-│  ├─ install.sh           一键安装 skill
-│  └─ tests/               协议单测
-└─ (slides / 设计文档不入库；slides 在仓库外，设计笔记见 firmware/AGENTS.md)
+└─ bridge/                 ①CC skill + ②Win/WSL 桥
+   ├─ bridge.py            Windows 串口守护 + TCP 服务
+   ├─ protocol.py          两端共用的帧协议 (+单测)
+   ├─ hooks/               CC hooks (permission_gate/status_out/statusline/ctl/client)
+   ├─ commands/claudee.md  /claudee 命令
+   ├─ settings.snippet.json  待并入的 hooks + statusLine
+   ├─ install.sh           一键安装 skill
+   └─ tests/               协议单测
 ```
 
 ## 🔧 构建与测试
@@ -185,10 +185,10 @@ cd bridge && python3 -m pytest tests/ -q
 
 ## 🙏 复用与致谢
 
-- 复用清华 Blazar 课程实验驱动：`Blazar_TFTLCD.c`(7.1 TFT)、`MMA8451Q.c`、`KL2x_gpio.c`、`UART.c`(1.2)、PORTA 按键中断(3.2)、TPM/ADC(8.2)、LED 接线(4.2)。
+- 复用课程实验例程驱动：`Blazar_TFTLCD.c`、`MMA8451Q.c`、`KL2x_gpio.c`、`UART.c`。
 - NXP/Freescale 设备头与启动代码位于 `firmware/Project_Headers/`、`firmware/Project_Settings/`。
-- 上述第三方文件保留各自原始许可；本仓库其余原创代码以 MIT 许可发布（见 `LICENSE`，可把版权人改成你的名字）。
-
+- 感谢曾鸣老师、杨潇师兄和沙菲师姐的悉心指导！
+  
 ---
 
 <div align="center">
