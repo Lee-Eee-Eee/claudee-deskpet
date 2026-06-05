@@ -1,0 +1,31 @@
+# --- build / toolchain artifacts ---
+firmware/build/
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+
+# --- python ---
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# --- editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*~
+*.swp
+
+# --- 个人展示物 / 内部设计笔记：不入公开仓库 ---
+# slides 在仓库外单独保存；实现细节看源码注释即可
+/slides/
+/docs/
+firmware/AGENTS.md
+AGENTS.md

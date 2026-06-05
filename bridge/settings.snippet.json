@@ -1,0 +1,28 @@
+{
+  "_comment": "把 hooks 段 + statusLine 段并入 ~/.claude/settings.json（用户级，对所有会话生效）。命令里的 $HOME 由 shell 展开。交互模型：忠实模式下挑战只在 PermissionRequest(CC 真要批准)时出现；PreToolUse 只上报忙(+严格模式才主动拦)。PreToolUse/PermissionRequest 的 timeout 必须 > bridge 的 accept 超时(默认300s)。statusLine 把 token/花费/上下文% 同步到板上 Clawd 屏底。",
+  "statusLine": {
+    "type": "command",
+    "command": "python3 \"$HOME/.claude/claudee/hooks/claudee_statusline.py\""
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      { "hooks": [ { "type": "command", "command": "python3 \"$HOME/.claude/claudee/hooks/status_out.py\" 1" } ] }
+    ],
+    "PostToolUse": [
+      { "matcher": "*", "hooks": [ { "type": "command", "command": "python3 \"$HOME/.claude/claudee/hooks/status_out.py\" 2" } ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "python3 \"$HOME/.claude/claudee/hooks/status_out.py\" 3" } ] }
+    ],
+    "Notification": [
+      { "matcher": "idle_prompt",        "hooks": [ { "type": "command", "command": "python3 \"$HOME/.claude/claudee/hooks/status_out.py\" 3" } ] },
+      { "matcher": "elicitation_dialog", "hooks": [ { "type": "command", "command": "python3 \"$HOME/.claude/claudee/hooks/status_out.py\" 7" } ] }
+    ],
+    "PreToolUse": [
+      { "matcher": "*", "hooks": [ { "type": "command", "command": "python3 \"$HOME/.claude/claudee/hooks/accept_gate.py\"", "timeout": 330 } ] }
+    ],
+    "PermissionRequest": [
+      { "matcher": "*", "hooks": [ { "type": "command", "command": "python3 \"$HOME/.claude/claudee/hooks/permission_gate.py\"", "timeout": 330 } ] }
+    ]
+  }
+}
