@@ -5,8 +5,11 @@
 **把 Claude Code 变成你桌上的硬件小宠物**
 
 清华大学《数字电路与嵌入式系统》大作业
+
 2026年春
+
 指导老师：曾鸣
+
 作者：李涛
 
 Blazar（NXP MKL25Z128，Cortex-M0+）教学板 + Claude Code(WSL)：
