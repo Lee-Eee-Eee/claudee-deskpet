@@ -5,8 +5,11 @@
 **把 Claude Code 变成你桌上的硬件小宠物**
 
 清华大学《数字电路与嵌入式系统》大作业
+
 2026年春
+
 指导老师：曾鸣
+
 作者：李涛
 
 Blazar（NXP MKL25Z128，Cortex-M0+）教学板 + Claude Code(WSL)：
@@ -58,16 +61,16 @@ Blazar（NXP MKL25Z128，Cortex-M0+）教学板 + Claude Code(WSL)：
 
 ## 🛠 硬件平台
 
-| 外设 | 器件 / 引脚 | 课程实验来源 |
-|---|---|---|
-| MCU | NXP **MKL25Z128**（Cortex-M0+，48MHz 上限，**本项目用默认 FEI ~20.97MHz**，16KB SRAM，无 FPU） | — |
-| LCD显示屏 | **ILI9341** 320×240 TFT，8 位并口（PTD0–7 + 控制脚 PTB8–11/PTA19/PTE31） | 7.1 |
-| 加速度传感器 | **MMA8451Q**，I²C0（PTE24/25，地址 0x1D） | 7.1 / 8.x |
-| 串口 | UART1（PTC3 RX / PTC4 TX，9600 8N1） | 1.2 |
-| 蜂鸣器 | TPM0_CH4 PWM（PTC8） | 8.2 |
-| 音量旋钮 | ADC0_SE14（PTC0） | 8.2 / 6.1 |
-| 按键 | PORTA 中断 A=PTA14 / B=PTA16 / C=PTA17 | 3.2 |
-| 板载 4 LED | PORTC（组选 PTC6/7/12/13 + 红 PTC9），PIT 软件 PWM 呼吸 | 4.2 |
+| 外设 | 器件 / 引脚 |
+|---|---|
+| MCU | NXP **MKL25Z128**（Cortex-M0+，48MHz 上限，**本项目用默认 FEI ~20.97MHz**，16KB SRAM，无 FPU） |
+| LCD显示屏 | **ILI9341** 320×240 TFT，8 位并口（PTD0–7 + 控制脚 PTB8–11/PTA19/PTE31） |
+| 加速度传感器 | **MMA8451Q**，I²C0（PTE24/25，地址 0x1D） |
+| 串口 | UART1（PTC3 RX / PTC4 TX，9600 8N1） |
+| 蜂鸣器 | TPM0_CH4 PWM（PTC8） |
+| 音量旋钮 | ADC0_SE14（PTC0） |
+| 按键 | PORTA 中断 A=PTA14 / B=PTA16 / C=PTA17 |
+| 板载 4 LED | PORTC（组选 PTC6/7/12/13 + 红 PTC9），PIT 软件 PWM 呼吸 |
 
 所有画面都是**局部/脏矩形直写面板 GRAM**。
 
