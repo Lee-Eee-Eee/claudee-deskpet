@@ -1,7 +1,6 @@
 /*
  * UART.h
  * UART通信驱动头文件
- * 适用于KL25Z128微控制器（Blazar教学系统）
  */
 
 #ifndef UART_H_

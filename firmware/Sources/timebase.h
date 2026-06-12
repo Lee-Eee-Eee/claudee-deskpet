@@ -1,5 +1,5 @@
 /*
- * timebase.h  —  SysTick 1ms 时基（取代驱动里的忙等 delay_ms 做帧节拍）
+ * timebase.h  —  SysTick 1ms 时基
  */
 #ifndef TIMEBASE_H_
 #define TIMEBASE_H_

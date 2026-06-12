@@ -1,7 +1,5 @@
 /*
- * gfx.h  —  Claudee 绘图助手（构建在 Blazar_TFTLCD 之上）
- *  P0-P3: 用"逐像素"原语（与已验证的 LCD_DrawPoint/LCD_Clear 同法），保证正确。
- *  P4: 再加开窗流式 gfx_blit 提速（需在板上验证后回填到 gfx_fill）。
+ * gfx.h  —  Claudee 绘图助手
  */
 #ifndef GFX_H_
 #define GFX_H_
@@ -25,13 +23,10 @@ void gfx_text(uint16_t x, uint16_t y, const char *s, uint8_t size,
 /* 文本像素宽度（size/2 * 字符数），便于做居中/右对齐 */
 uint16_t gfx_text_w(const char *s, uint8_t size);
 
-/* 开窗流式快速填充（约 3-4x gfx_fill）。默认不用；上板确认窗口流式正常后，
- * 可把性能敏感处（如游戏）的 gfx_fill 换成它。见 gfx.c 顶部说明。*/
+/* 开窗流式快速填充（约 3-4x gfx_fill）。默认不用。*/
 void gfx_fill_fast(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 
-/* 开窗流式画索引位图（不透明：下标 0 用 bg 画，整块一次性流式写）。
- * 比 gfx_draw_indexed(逐像素逐格 SetCursor) 快很多，且整块重画 -> 无残影。
- * 同样依赖窗口流式正常(见 gfx_fill_fast 风险说明)。*/
+/* 开窗流式画索引位图（不透明：下标 0 用 bg 画，整块一次性流式写）。*/
 void gfx_blit_fast(uint16_t x, uint16_t y, const uint8_t *map,
                    uint16_t w, uint16_t h, uint8_t scale,
                    const uint16_t *palette, uint16_t bg);

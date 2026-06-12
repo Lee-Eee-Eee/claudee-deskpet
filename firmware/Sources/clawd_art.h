@@ -1,6 +1,5 @@
 /*
- * clawd_art.h  —  Clawd（Claude Code 像素螃蟹吉祥物）形体  v2
- *  按官方贴图修正比例：**平头顶** + 矮胖更宽的方身 + 两侧更长的"手/钳" + 四条短细腿。
+ * clawd_art.h  —  Clawd（Claude Code 像素螃蟹吉祥物）形体
  *  眼睛、表情(眨/瞪/笑/抓狂)、钳子挥动、Claude ✶、配件 由 display.c 在形体上叠加绘制，
  *  一套形体复用到全部状态。整体由 gfx_draw_indexed/gfx_blit_fast 按 scale 放大。
  */
@@ -12,14 +11,14 @@
 #define CLAWD_W 20
 #define CLAWD_H 12
 
-/* 眼睛逻辑坐标/大小（窄一点、不那么方；上半身居中、对称）*/
+/* 眼睛逻辑坐标/大小*/
 #define CLAWD_EYE_L_X 6
 #define CLAWD_EYE_R_X 12
 #define CLAWD_EYE_Y   2
 #define CLAWD_EYE_W   2
 #define CLAWD_EYE_H   3
 
-/* 两侧"手/钳"（rows 5-6 向外凸出 2 列，更长）*/
+/* 两侧钳*/
 #define CLAWD_HAND_L_X 0
 #define CLAWD_HAND_R_X 18
 #define CLAWD_HAND_Y   5

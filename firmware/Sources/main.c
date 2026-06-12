@@ -144,5 +144,4 @@ int main(void)
             sfx_update();
         }
     }
-    /* 不会到达 */
 }

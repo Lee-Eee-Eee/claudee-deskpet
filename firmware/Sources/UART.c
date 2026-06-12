@@ -1,22 +1,16 @@
 /*
  * UART.c
  * UART1通信驱动实现
- * 适用于KL25Z128微控制器（Blazar教学系统）
  * 
  * 通信参数：波特率9600，8位数据位，无奇偶校验，1位停止位
  */
 
-#include "derivative.h"  /* 包含MKL25Z4.h，定义所有寄存器 */
+#include "derivative.h"
 
 /*
  * 将4位二进制数转换为ASCII字符
  * 参数：num - 0-15之间的数
  * 返回：对应ASCII字符（0-9或A-F）
- * 
- * 问号表达式说明：(条件)? 值1 : 值2
- * 等价于 if-else，但更简洁
- * 如果num>=10，返回'A'+num-10（即A-F）
- * 否则，返回'0'+num（即0-9）
  */
 unsigned char dtoa(unsigned char num)
 {
@@ -25,7 +19,6 @@ unsigned char dtoa(unsigned char num)
 
 /*
  * UART1时钟初始化
- * 功能：使能UART1模块时钟和PORTC端口时钟
  */
 void UART1_SIM_Init(void)
 {
@@ -38,8 +31,6 @@ void UART1_SIM_Init(void)
 
 /*
  * UART1端口引脚配置
- * 功能：将PTC3和PTC4配置为UART1的RX和TX功能
- * MUX=0x3 表示选择第3号功能（UART1）
  */
 void UART1_PORT_Init(void)
 {
@@ -55,8 +46,7 @@ void UART1_PORT_Init(void)
  * 参数：
  *   sysclk - 系统时钟频率（单位：kHz）
  *   baud   - 目标波特率（如9600）
- * 
- * 波特率计算：SBR = sysclk / (16 × baud)
+ * SBR = sysclk / (16 × baud)
  */
 void UART1_Config(unsigned int sysclk, unsigned int baud)
 {

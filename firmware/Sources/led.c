@@ -1,17 +1,5 @@
 /*
- * led.c  —  4 颗板载 LED 状态灯（仅红色）。PORTC 单写者 -> 与 LCD(PORTB RMW)/串口/蜂鸣器零竞争。
- *
- *  接线沿用 BlazarTest LED.c（同一块 Blazar 板）:
- *    组选(低有效, PORTC):  LED1=PTC12  LED2=PTC13  LED3=PTC7  LED4=PTC6
- *    颜色(高有效):         红=PTC9    （绿 PTB18 / 蓝 PTB19 故意不用 -> 避开 PORTB 与 LCD 抢）
- *  点亮某颗红灯 = 该组拉低 + PTC9 拉高; 多颗"同色"可同时点亮, 无需分时复用。
- *
- *  为什么只用 PORTC:
- *    LCD 控制脚 LCD_CS/RS/WR/RD 在 GPIOB_PDOR 上用读-改-写(|=/&=~), 每帧上千次。
- *    若中断里也 RMW 同一 GPIOB, 会丢更新。绿/蓝在 PORTB -> 不用。红+组选全在 PORTC,
- *    而 GPIOC_PDOR 整个工程只此中断写(蜂鸣器走 TPM、UART/ADC 走外设复用, 都不碰 GPIOC_PDOR),
- *    => 单写者, 即便 RMW 也无并发问题。已逐文件核对。
- *
+ * led.c  —  4 颗板载 LED 状态灯（仅红色）。
  *  PIT(IRQ22) ~8kHz 中断: 32 级软件 PWM 做亮度, 刷新率 ~250Hz(无频闪); 呼吸/快闪相位每周期推进。
  *  PIT 时钟源 = 总线时钟(默认 FEI ~10.49MHz)。中断极短(只算一次亮度 + 写 GPIOC), 约 0.7% CPU。
  */
@@ -52,7 +40,7 @@ static uint8_t tri8(uint16_t phase)
     return (p < 128u) ? p : (uint8_t)(255u - p);
 }
 
-/* 呼吸亮度: 三角波再平方(gamma≈2, 更顺眼), 缩放到 0..peak */
+/* 呼吸亮度: 三角波再平方, 缩放到 0..peak */
 static uint8_t breathe(uint16_t phase, uint8_t peak)
 {
     uint32_t t = tri8(phase);                       /* 0..127 */

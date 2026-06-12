@@ -60,11 +60,7 @@ uint16_t gfx_text_w(const char *s, uint8_t size)
     return (uint16_t)((size / 2) * (uint16_t)strlen(s));
 }
 
-/* --- 开窗流式快速填充（P4 提速；默认不用，需上板确认 streaming 正常后再切）---
- * 复用 LCD_SetCursor 完全相同的寻址(0x2b=X 起止, 0x2a=Y 起止, USE_HORIZONTAL=1)，
- * 只把窗口 end 设为 start+size-1，然后一次性流式写 w*h 个像素，省掉逐像素设光标，
- * 速度约提升 3-4x。原驱动里被注释掉的整屏流式版只设了 1px 窗口才失败；这里设真窗口。
- * 风险：若该面板/接线对窗口流式异常，画面会乱 -> 退回用 gfx_fill 即可。*/
+/* --- 开窗流式快速填充（P4 提速；默认不用）--- */
 static void gfx_set_window(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
     uint16_t x1 = (uint16_t)(x + w - 1), y1 = (uint16_t)(y + h - 1);
@@ -91,12 +87,10 @@ void gfx_fill_fast(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t colo
 
 /* 开窗流式不透明位图：整块 W=w*scale, H=h*scale 一次性流式写；
  * 下标 0 -> bg, 其余 -> palette[idx]。整块覆盖 => 天然无残影。
- * 右/下裁剪到屏内(左/上的负坐标须由调用方避免，因参数是 uint16_t)。
+ * 右/下裁剪到屏内。
  *
- * ★方向(关键)：本面板 MADCTL=0x88(MV=0)，LCD_SetCursor 把 X 写 0x2b(PASET)、Y 写 0x2a(CASET)，
- *   开窗后 GRAM 在窗口内沿 **CASET(=Y) 轴先自增**(Y 为快轴, X 为慢轴)。
- *   所以必须按【列优先】喂像素：外层走设备 X(慢轴)、内层走设备 Y(快轴)。
- *   早期版本按行优先(X 内层)流式 -> 与硬件自增顺序相反 -> 精灵被转置/镜像(实测图标方向反)。
+ * ★方向(关键)：
+ *   按【列优先】喂像素：外层走设备 X(慢轴)、内层走设备 Y(快轴)。
  * 用乘法 sj*w 取源行(M0+ 有单周期 MULS, 只避免除法即可)。*/
 void gfx_blit_fast(uint16_t x, uint16_t y, const uint8_t *map,
                    uint16_t w, uint16_t h, uint8_t scale,

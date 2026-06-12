@@ -1,7 +1,6 @@
 /*
  * timebase.c  —  SysTick 1ms 时基
  * 核心时钟默认 FEI ~20.97MHz（启动代码不配 MCG）→ 1ms ≈ 20970 ticks。
- * 不要重配时钟，否则此处与 UART 波特率都要重算。
  */
 #include "derivative.h"
 #include "timebase.h"

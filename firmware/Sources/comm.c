@@ -1,7 +1,6 @@
 /*
  * comm.c  —  UART1 串口通信
- *  - 复用 1.2 的 UART.c: UART1_Init() 已配 PTC3/PTC4、9600 8N1，并已置 C2 的 RIE。
- *  - 这里补上 NVIC 使能 + UART1_IRQHandler，做中断式 RX（不阻塞主循环/动画）。
+ *  - NVIC 使能 + UART1_IRQHandler，做中断式 RX（不阻塞主循环/动画）。
  *  - UART1 = IRQ13（按 kinetis_sysinit.c 向量表核实）。
  *  - 看门狗：>3s 没收到任何字节 → 视为断连(CC_SLEEP)，覆盖拔线/CC 退出/桥崩溃。
  *
