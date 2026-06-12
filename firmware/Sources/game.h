@@ -1,5 +1,5 @@
 /*
- * game.h  —  Clawd 跑酷（Chrome 小恐龙式）：跳过/躲过对手图标攒分，达标可放行
+ * game.h  —  Clawd 跑酷：跳过/躲过对手图标攒分，达标可放行
  *  操作: A 键(PTA14)=跳；B 键(PTA16)=到 10 分时"放行退出"。
  *  障碍: 地面图标(GPT/Gemini/Grok/Codex/Antigravity/opencode)要跳过；
  *        空中图标在头顶高度，跳起来会撞 -> 不能跳(保持地面)。

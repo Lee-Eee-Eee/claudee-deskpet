@@ -3,7 +3,6 @@
  *
  *  玩法: C 键跳过【地面】对手图标；【空中】图标在头顶高度 —— 跳起来会撞，要保持地面。
  *        **三条命**：撞到掉一条命(分数保留)，命掉光才把分数清零软重开。
- *        对手图标(10 个): OpenAI/Gemini/Grok/Codex/DeepSeek/Kimi/Antigravity/opencode/openclaw/Claude。
  *        攒够 GAME_TARGET(10) 分 -> 暂停给选择: B=放行退出(GAME_WIN) / C=继续(再 +5)。
  *
  *  渲染: 开窗流式(gfx_fill_fast / gfx_blit_fast, 列优先, 不镜像) —— 整块不透明重画，

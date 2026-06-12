@@ -4,10 +4,9 @@
  *    顶栏  y0..28      : 底色随状态; 左 "Claudee"  右 状态标签
  *    Clawd y44..156    : 18x14 形体 scale=8 -> 144x112, 居中 x=88
  *    星芒  右上         : Claude ✶ 脉冲(收缩放大)
- *    状态词 y176        : 居中轮播(CC 俏皮词), ~2.5s 一换(放慢)
+ *    状态词 y176        : 居中轮播, ~2.5s 一换(放慢)
  *    遥测  y202         : token/cost/ctx
  *    徽章  y222         : 预选挑战 SQUAT/GAME
- *  灵动来源(廉价局部重绘, 不整屏重画形体): 眨眼/表情 + 两侧手挥动 + 星芒脉冲。
  */
 #include "Blazar_TFTLCD.h"
 #include "claudee.h"

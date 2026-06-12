@@ -37,7 +37,7 @@ typedef enum { CH_SQUAT = 0, CH_GAME = 1 } challenge_t;
 /* 备用蓝 #4A90D9 (R74 G144 B217): (9<<11)|(36<<5)|27     */
 #define CLAWD_BLUE    0x4C9B
 
-#define COL_BG        0x0000   /* 背景：黑（贴合终端审美）*/
+#define COL_BG        0x0000   /* 背景：黑*/
 #define COL_TEXT      0xFFFF   /* 白字 */
 #define COL_DIM       0x8430   /* 灰   */
 #define COL_OK        0x07E0   /* 绿（Allowed）*/
